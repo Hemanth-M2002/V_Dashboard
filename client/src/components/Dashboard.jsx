@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     BarChart,
     Bar,
@@ -11,7 +12,8 @@ import {
     Tooltip,
     Legend,
 } from "recharts";
-import { Globe, TrendingUp, Lightbulb, AlertTriangle, Newspaper } from "lucide-react";
+import { Globe, TrendingUp, Lightbulb, AlertTriangle, Newspaper, ChartBarIcon } from "lucide-react";
+import Chart from "./Chart";
 
 const COLORS = [
     "#FF6384", // Red
@@ -45,6 +47,12 @@ export default function Dashboard() {
     const [regionData, setRegionData] = useState([]); // Placeholder for regional data
     const [activeTab, setActiveTab] = useState("overview");
     const [selectedSector, setSelectedSector] = useState("All");
+    const navigate = useNavigate();
+
+    const handleChart = (e) =>{
+        // e.preventDefault()
+        navigate('/chart');
+      }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -127,6 +135,14 @@ export default function Dashboard() {
                         <TrendingUp style={{ marginRight: "0.5rem", verticalAlign: "middle" }} />
                         Trends Analysis
                     </button>
+                    <button
+                        style={{ width: "100%", padding: "0.5rem", backgroundColor: activeTab === "" ? "#edf2f7" : "transparent" }}
+                        onClick={(handleChart)=> setActiveTab("chart")}
+                    >
+                        
+                        <ChartBarIcon style={{ marginRight: "0.5rem", verticalAlign: "middle" }} />
+                        Chart
+                    </button>
                 </nav>
             </aside>
 
@@ -199,8 +215,9 @@ export default function Dashboard() {
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem" }}>
                             <div style={{ border: "1px solid #e2e8f0", padding: "1rem", borderRadius: "0.5rem" }}>
                                 <h3 style={{ fontSize: "1rem", fontWeight: "500" }}>Recent Insights</h3>
-                                <div>
-                                    {insightData.slice(0, 5).map((insight, index) => (
+                                {/* Scrollable Container */}
+                                <div style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "0.5rem" }}>
+                                    {insightData.map((insight, index) => (
                                         <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
                                             <Newspaper style={{ marginRight: "0.5rem", color: "#4a5568" }} />
                                             <div>
@@ -213,6 +230,11 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </div>
+                )}
+                {activeTab === "chart" && (
+                    <div className="chart">
+                        {<Chart/>}
+                        </div>
                 )}
             </main>
         </div>

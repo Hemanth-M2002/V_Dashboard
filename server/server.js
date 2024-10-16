@@ -27,6 +27,7 @@ const DataSchema = new mongoose.Schema({
     added: String,
     published: String,
     relevance: Number,
+    year : Number
 });
 
 const DataModel = mongoose.model('Data', DataSchema);
